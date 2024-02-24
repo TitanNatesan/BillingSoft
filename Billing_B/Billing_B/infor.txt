@@ -1,0 +1,9 @@
+the recipt contain fields like, 
+
+year, month, date, customer name, customer address,
+amount they get for the property, 
+property details, 
+weight of property with loss (gram), 
+weight of property with loss (milligram), 
+worth of property,
+pic of customer, pic of property

@@ -1,5 +1,5 @@
 """
-WSGI config for Venkatesh_Finance project.
+WSGI config for Billing_B project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Venkatesh_Finance.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Billing_B.settings')
 
 application = get_wsgi_application()

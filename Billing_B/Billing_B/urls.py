@@ -1,5 +1,5 @@
 """
-URL configuration for Venkatesh_Finance project.
+URL configuration for Billing_B project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -19,5 +19,5 @@ from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("",include('billing.urls')),
+    path('',include('home.urls')),
 ]
