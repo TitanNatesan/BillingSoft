@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer List</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #3498db;
+        margin-bottom: 20px;
+      }
+
+      .search-bar {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      label {
+        font-size: 16px;
+        color: #555;
+      }
+
+      input {
+        padding: 10px;
+        border: 2px solid #3498db;
+        border-radius: 6px;
+        width: 250px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #2980b9;
+      }
+
+      .customers-container {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .customer-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px;
+        width: 70%; /* Adjusted width */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+        cursor: pointer; /* Add cursor pointer for clickable effect */
+      }
+
+      .customer-card:hover {
+        transform: scale(1.05);
+      }
+
+      .customer-image {
+        width: 60px; /* Adjusted width */
+        height: 60px; /* Adjusted height */
+        border-radius: 50%;
+        margin-right: 20px;
+      }
+
+      h2 {
+        color: #3498db;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #555;
+        margin: 8px 0;
+      }
+
+      #create-receipt-form {
+        display: none; /* Hidden by default */
+        margin-top: 20px;
+      }
+
+      #create-receipt-form h2 {
+        color: #3498db;
+        margin-bottom: 10px;
+      }
+
+      #receipt-form input {
+        margin-bottom: 10px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      p.no-customers {
+        font-size: 18px;
+        color: #555;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Customer List</h1>
+
+    <div class="search-bar">
+      <form method="GET">
+        <label for="search">Search by Customer Name:</label>
+        <input
+          type="text"
+          id="search"
+          name="search"
+          value="{{ search_query }}"
+        />
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <div class="loader" id="loader"></div>
+
+    <div class="customers-container">
+      {% for customer in customers %}
+      <div class="customer-card" data-customer-id="{{ customer.id }}">
+        <img
+          src="{{ customer.pic.url }}"
+          alt="Customer Image"
+          class="customer-image"
+        />
+        <div>
+          <h2>{{ customer.name }}</h2>
+          <p>Age: {{ customer.age }}</p>
+          <!-- Add more fields as needed -->
+        </div>
+      </div>
+      {% empty %}
+      <p class="no-customers">No customers found.</p>
+      {% endfor %}
+    </div>
+
+    <!-- Form for creating a receipt -->
+    <div id="create-receipt-form">
+      <h2>Create Receipt</h2>
+      <form id="receipt-form">
+        <input
+          type="text"
+          id="property_name"
+          name="property_name"
+          placeholder="Property Name"
+          required
+        />
+        <input
+          type="number"
+          id="loan_amount"
+          name="loan_amount"
+          placeholder="Loan Amount"
+          required
+        />
+        <input
+          type="hidden"
+          id="selected_customer_id"
+          name="selected_customer_id"
+        />
+
+        <button type="submit">Create Receipt</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var loader = document.getElementById("loader");
+        var customersContainer = document.querySelector(".customers-container");
+        var createReceiptForm = document.getElementById("create-receipt-form");
+        var selectedCustomerIdInput = document.getElementById(
+          "selected_customer_id"
+        );
+
+        customersContainer.addEventListener("click", function (event) {
+          var clickedElement = event.target;
+          if (clickedElement.classList.contains("customer-card")) {
+            var customerId = clickedElement.dataset.customerId;
+            selectedCustomerIdInput.value = customerId;
+            showCreateReceiptForm();
+          }
+        });
+
+        function showCreateReceiptForm() {
+          createReceiptForm.style.display = "block";
+        }
+
+        var receiptForm = document.getElementById("receipt-form");
+        receiptForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var property_name = document.getElementById("property_name").value;
+          var loan_amount = document.getElementById("loan_amount").value;
+
+          var formData = {
+            property_name: property_name,
+            loan_amount: loan_amount,
+            customer_id: selectedCustomerIdInput.value,
+          };
+
+          fetch("/create_receipt/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              // Optionally handle success message or redirection
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              // Handle error message to the user
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

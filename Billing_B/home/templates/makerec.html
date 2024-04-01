@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Receipt</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #009688;
+        margin-bottom: 20px;
+      }
+
+      form {
+        width: 60%;
+        margin-top: 20px;
+        opacity: 0;
+        animation: fadeIn 1s ease-in-out forwards;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+      #formm {
+        display: none;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: #009688;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 150, 136, 0.25);
+      }
+
+      button {
+        background-color: #009688;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      button:hover {
+        background-color: #00796b;
+      }
+
+      .custom-file-input {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        border: 1px solid #009688;
+        border-radius: 6px;
+        width: 100%;
+        background-color: #fff;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      .custom-file-input:hover {
+        border-color: #009688;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 150, 136, 0.25);
+      }
+
+      .custom-file-input input[type="file"] {
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+
+      .custom-file-input .browse-btn {
+        background-color: #009688;
+        color: #fff;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 4px 0px 0px 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-inline-end: 10px;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .custom-file-input .browse-btn:hover {
+        background-color: #00796b;
+      }
+
+      .file-name {
+        margin-top: 8px;
+        color: #555;
+        font-size: 14px;
+      }
+
+      button[type="submit"] {
+        text-align: center;
+        width: 20%;
+        margin: auto 40%;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        document
+          .getElementById("customer_pic")
+          .addEventListener("change", function () {
+            var fileName = this.files[0].name;
+            document.getElementById("file-name-display").innerText = fileName;
+          });
+
+        document
+          .getElementById("property_pic")
+          .addEventListener("change", function () {
+            var fileName = this.files[0].name;
+            document.getElementById("property-file-name-display").innerText =
+              fileName;
+          });
+      });
+
+      function toggleCustomerFields() {
+        var customerType = document.getElementById("user_type").value;
+        var cdNew = document.getElementById("cd-new");
+        var cdExisting = document.getElementById("cd-existing");
+        var formm = document.getElementById("formm");
+
+        if (customerType === "new") {
+          formm.style.display = "block";
+          cdNew.style.display = "block";
+          cdExisting.style.display = "none";
+          document.getElementById("customer_type").value = "new";
+        } else if (customerType === "existing") {
+          formm.style.display = "block";
+          cdNew.style.display = "none";
+          cdExisting.style.display = "block";
+          document.getElementById("customer_type").value = "existing";
+        }
+      }
+
+      function selectCustomer() {
+        var cid = document.getElementById("customer_id");
+        cid.value = document.getElementById("customerSelect").value;
+
+        var ctype = document.getElementById("customer_type").value;
+        ctype = document.getElementById("user_type").value;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Create Receipt</h1>
+    <label for="customer_type">Customer Type:</label>
+    <select id="user_type" onchange="toggleCustomerFields()">
+      <option value="">--SELECT--</option>
+      <option value="new">New</option>
+      <option value="existing">Existing</option>
+    </select>
+
+    <form id="formm" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <!-- Customer Details -->
+      <div id="cd-new">
+        <h2>Customer Details</h2>
+
+        <input type="hidden" id="customer_id" name="customer_id" value="" />
+        <input type="hidden" id="customer_type" name="customer_type" value="" />
+
+        <label for="customer_name">Customer Name:</label>
+        <input type="text" id="customer_name" name="customer_name" />
+
+        <label for="customer_age">Customer Age:</label>
+        <input type="number" id="customer_age" name="customer_age" />
+
+        <label for="customer_phone">Customer Phone:</label>
+        <input type="tel" id="customer_phone" name="customer_phone" />
+
+        <label for="customer_age">Address Line One:</label>
+        <input type="text" id="addressline_1" name="addressline_1" />
+
+        <label for="customer_age">Address Line Two:*</label>
+        <input type="text" id="addressline_2" name="addressline_2" />
+
+        <label for="customer_age">Landmark:</label>
+        <input type="text" id="landmark" name="landmark" />
+
+        <label for="customer_age">City:</label>
+        <input type="text" id="city" name="city" value="Tirupur" />
+
+        <label for="customer_age">State:</label>
+        <input type="text" id="state" name="state" value="TamilNadu" />
+
+        <label for="customer_age">Postal Code:</label>
+        <input type="number" id="postal_code" name="postal_code" />
+
+        <label for="customer_pic">Picture of Customer:</label>
+        <div class="custom-file-input">
+          <input
+            type="file"
+            id="customer_pic"
+            name="customer_pic"
+            accept="image/*"
+          />
+          <button type="button" class="browse-btn">Choose File</button>
+          <div class="file-name" id="file-name-display"></div>
+        </div>
+        <hr />
+      </div>
+
+      <div id="cd-existing" styel="display:none;">
+        <label for="customerSelect">Select Customer :</label>
+        <select id="customerSelect" onchange="selectCustomer()">
+          <option value="">--SELECT--</option>
+          {% for user in users %}
+          <option value="{{user.id}}">
+            {{user.name}} | {{user.address.phone}}
+          </option>
+          {% endfor %}
+        </select>
+        <hr />
+      </div>
+
+      <!-- Property Details -->
+      <div class="pd">
+        <h2>Property Details</h2>
+
+        <label for="property_name">Property Name:</label>
+        <input type="text" id="property_name" name="property_name" />
+
+        <label for="property_description">Property Description:</label>
+        <textarea
+          id="property_description"
+          name="property_description"
+          rows="4"
+        ></textarea>
+
+        <label for="property_value">Property Value:</label>
+        <input type="number" id="property_value" name="property_value" />
+
+        <label for="property_weight_gram">Weight (Gram):</label>
+        <input
+          type="number"
+          id="property_weight_gram"
+          name="property_weight_gram"
+        />
+
+        <label for="property_weight_milligram">Weight (Milligram):</label>
+        <input
+          type="number"
+          id="property_weight_milligram"
+          name="property_weight_milligram"
+        />
+
+        <label for="property_pic">Picture of Property:</label>
+        <div class="custom-file-input">
+          <input
+            type="file"
+            id="property_pic"
+            name="property_pic"
+            accept="image/*"
+          />
+          <button type="button" class="browse-btn">Choose File</button>
+          <div class="file-name" id="property-file-name-display"></div>
+        </div>
+      </div>
+      <hr />
+
+      <!-- Receipt Details -->
+      <div class="rd">
+        <h2>Receipt Details</h2>
+
+        <label for="loan_amount">Loan Amount:</label>
+        <input type="number" id="loan_amount" name="loan_amount" />
+
+        <label for="interest_rate">Interest Rate:</label>
+        <input type="number" id="interest_rate" name="interest_rate" />
+
+        <label for="total_dues">Total Dues:</label>
+        <input type="number" id="total_dues" name="total_dues" />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="b">Create Receipt</button>
+    </form>
+    {% include "footer.html" %}
+
+  </body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #009688;
+        margin-bottom: 20px;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+        transition: background-color 0.6s ease; /* Transition for background-color */
+      }
+
+      tr:hover {
+        background-color: #ddd;
+        transition: background-color 0.6s ease; /* Transition for background-color */
+      }
+
+      /* Hover effect for subtable rows */
+      table table tr:hover {
+        background-color: #fff; /* Adjust the background color as needed */
+        transition: background-color 0.6s ease; /* Transition for background-color */
+      }
+
+      nav {
+        margin-bottom: 20px;
+      }
+
+      a {
+        color: #009688;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" id="home-button">Home</a>
+    </nav>
+    <h1>User Details</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Age</th>
+          <th>Property</th>
+          <th>Address</th>
+          <th>Receipts</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in users %}
+        <tr>
+          <td onclick="window.location.href='/user/{{user.id}}/details'">
+            <a href="/user/{{ user.id }}/details">{{ user.name }}</a>
+          </td>
+          <td>{{ user.age }}</td>
+          <td>{{ user.property.name }}</td>
+          <td>
+            {{ user.address.address_line_1 }}, {{ user.address.city }}, {{user.address.state }}
+          </td>
+          <td>
+            <table>
+              <thead>
+                <tr>
+                  <th>Receipt ID</th>
+                  <th>Loan Amount</th>
+                  <th>Date Issued</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for receipt in user.reciept_set.all %}
+                <tr
+                  onclick="window.location.href='/loan-details/{{receipt.id}}/'"
+                >
+                  <td>{{ receipt.id }}</td>
+                  <td>{{ receipt.loan_amount }}</td>
+                  <td>{{ receipt.when }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </td>
+          <td>{{ user.address.phone }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% include "footer.html" %}
+  </body>
+</html>

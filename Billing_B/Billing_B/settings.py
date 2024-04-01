@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'phonenumber_field',
     'rest_framework',
+    'wkhtmltopdf', 
 ]
 
 MIDDLEWARE = [
@@ -79,8 +80,11 @@ WSGI_APPLICATION = 'Billing_B.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Bill',
+        'USER':'Titan',
+        'PASSWORD':'titan004',
+        'HOST':"localhost",
     }
 }
 

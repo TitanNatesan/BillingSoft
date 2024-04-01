@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receipt Management</title>
+    <!-- Add any additional styling or link to CSS files here -->
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #009688;
+      }
+
+      .options {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 20px;
+      }
+
+      .option-button {
+        background-color: #009688;
+        color: #fff;
+        padding: 15px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease-in-out;
+        text-align: center;
+        text-decoration: none;
+        width: 250px;
+      }
+
+      .option-button:hover {
+        background-color: #00796b;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+    </style>
+  </head>
+  <body>
+    <h1>Receipt Management System</h1>
+
+    <div class="options">
+      <a href="/view_receipts/" class="option-button">View Receipts</a>
+      <a href="/makereceiptNC/" class="option-button">Make Receipt</a>
+      <a href="/view_records/" class="option-button">View Data</a>
+    </div>
+    {% include "footer.html" %}
+  </body>
+</html>

@@ -7,3 +7,32 @@ weight of property with loss (gram),
 weight of property with loss (milligram), 
 worth of property,
 pic of customer, pic of property
+
+
+app la 1st oru simple login page irukanum 
+login pannathuku aprama...
+recipts yeallame display aaganum in a specific 
+
+-> new recipt
+    ->> property details 
+    ->> customer details 
+    ->> create reciept
+    in a page i wanna take info like 
+        [
+            *** name of the property and a short description for it
+            with its value and
+            weight in gram and milligram separatly
+            upload the pic ***
+
+            *** choose or create a user (customer)
+            choose the user
+            if already exist, with the phone or name of the customer 
+            else create a new user by providing the name age phone number and pic
+            of the user with the property of them ***
+
+            *** Make a reciept by choosing the customer name and property 
+            along with the loan_amount, intrest_rate, total_dues 
+            and make a pdf and save that to the database ***
+        ]
+-> view reciept (with search option)
+-> 

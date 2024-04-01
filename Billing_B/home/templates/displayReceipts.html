@@ -1,0 +1,199 @@
+{% load tz %} {% get_current_timezone as current_timezone %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Receipts</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      h1 {
+        color: #3498db;
+        margin-bottom: 20px;
+      }
+
+      .search-bar {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      label {
+        font-size: 16px;
+        color: #555;
+      }
+
+      input {
+        padding: 10px;
+        border: 2px solid #3498db;
+        border-radius: 6px;
+        width: 250px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #2980b9;
+      }
+
+      .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: auto;
+        margin-top: 20px;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      #receipts-container {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .receipt-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 10px;
+        width: 70%; /* Adjusted width */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        align-items: center;
+      }
+
+      .receipt-card:hover {
+        transform: scale(1.05);
+      }
+
+      .customer-image {
+        width: 60px; /* Adjusted width */
+        height: 60px; /* Adjusted height */
+        border-radius: 50%;
+        margin-right: 20px;
+        object-fit: contain;
+
+      }
+
+      h2 {
+        color: #3498db;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #555;
+        margin: 8px 0;
+      }
+
+      p.no-receipts {
+        font-size: 18px;
+        color: #555;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" id="home-button">Home</a>
+    </nav>
+    <h1>Receipts</h1>
+
+    <div class="search-bar">
+      <label for="customer_name">Search by Customer Name:</label>
+      <input type="text" id="customer_name" name="customer_name" />
+    </div>
+
+    <div class="loader" id="loader"></div>
+
+    {% if receipts %}
+    <div id="receipts-container">
+      {% for receipt in receipts %}
+      <div class="receipt-card" onclick="window.location.href = '/user/{{ receipt.customer.id }}/details'">
+        <img
+          src="{{ receipt.customer.pic.url }}"
+          alt="Customer Image"
+          class="customer-image"
+        />
+        <div>
+          <h2>{{ receipt.customer.name }}</h2>
+          <p>{{receipt.customer.address.address_line_1}}</p>
+          {% timezone "Asia/Kolkata" %}
+          <p>Receipt Date: {{ receipt.when }}</p>
+          {% endtimezone %}
+          <p>Loan Amount: {{ receipt.loan_amount }}</p>
+          <p>Total Dues: {{ receipt.total_dues }}</p>
+          <!-- Add more fields as needed -->
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-receipts">No receipts available.</p>
+    {% endif %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var input = document.getElementById("customer_name");
+        var loader = document.getElementById("loader");
+
+        input.addEventListener("input", function () {
+          showLoader();
+          searchReceipts();
+        });
+
+        function showLoader() {
+          loader.style.display = "block";
+        }
+
+        function hideLoader() {
+          loader.style.display = "none";
+        }
+
+        function searchReceipts() {
+          var filter = input.value.toUpperCase();
+          var container = document.getElementById("receipts-container");
+          var cards = container.getElementsByClassName("receipt-card");
+
+          for (var i = 0; i < cards.length; i++) {
+            var card = cards[i];
+            var name = card.querySelector("h2").innerText.toUpperCase();
+
+            // Use includes for case-insensitive comparison
+            if (name.includes(filter)) {
+              card.style.display = "";
+            } else {
+              card.style.display = "none";
+            }
+          }
+
+          hideLoader(); // Hide loader after search is done
+        }
+      });
+    </script>
+    {% include "footer.html" %}
+
+  </body>
+</html>

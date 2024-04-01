@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loan Details</title>
+    <style>
+      /* Add your CSS styles here */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      h1 {
+        color: #009688;
+        margin-bottom: 20px;
+      }
+      .loan-details {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .loan-details p {
+        margin-bottom: 10px;
+      }
+      strong {
+        display: inline-block;
+        width: 200px;
+        margin: auto 30px;
+      }
+      strong::after {
+        content: ":";
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="/" id="home-button">Home</a>
+      <a href='#' onclick="window.history.back()">Back</a>
+    </nav>
+    <div class="container">
+      <h1>Loan Details</h1>
+      <div class="loan-details">
+        <p><strong>Loan Amount</strong> {{ reciept.loan_amount }}</p>
+        <p><strong>Interest Rate</strong> {{ reciept.interest_rate }}%</p>
+        <p><strong>Total Dues</strong> {{ reciept.total_dues }}</p>
+        <p><strong>Dues Done</strong> {{ reciept.due_done }}</p>
+        <p><strong>Due Skip</strong> {{ reciept.due_skip }}</p>
+      </div>
+    </div>
+  </body>
+</html>

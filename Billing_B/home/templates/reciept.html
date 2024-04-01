@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Venkateshwara Finance</title>
+    <style>
+      .b {
+        border: 1px solid black;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      b{
+        font-weight: 100;
+        text-decoration: underline;
+      }
+      body {
+        display: flex;
+        flex-wrap: wrap;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
+      .header {
+        display: block;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        text-align: center;
+      }
+      .header p {
+        text-align: center;
+        width: 70%;
+        margin: auto;
+      }
+      hr {
+        width: 90%;
+        border: 1px solid black;
+        margin: auto;
+      }
+      .top {
+        display: block;
+        width: 80%;
+        margin: 20px auto;
+      }
+      .top .lft, .rit{
+        display: inline-block;
+        width: 20%; 
+        padding: 2px;
+        font-weight: 500;
+        font-size: 16px;
+        margin: 20px auto;
+        line-height: 30px;
+      }
+      .top .lft p{
+        width: 100%;
+      }
+      .top .lft p::after{
+        content: ":";
+        float: right;
+      }
+      .top img{
+        width: 20%;
+        float: right;
+        border-radius: 3px;
+      }
+      .cont {
+        width: 86%;
+        margin: 20px auto;
+      }
+      .cont p{
+        letter-spacing: 1px;
+        word-spacing: 3px;
+        line-height: 22px;
+      }
+      .base{
+        display: block;
+        width: 90%;
+        margin: 20px auto;
+        margin-top: 50px;
+      }
+      .base .ls,.rt{
+        display: inline-block ;
+        width: 32%;
+        font-size: 14px;
+        text-align: center;
+      }
+      .base .ls{
+        float: left;
+      }
+      .base .rt{
+        float: right;
+      }
+      .foot{
+        width: 90%;
+        margin: 20px  auto;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header" onclick="window.location.href = '/'">
+      <h1>Venkateshwara Finance</h1>
+      <p>Licence No. <i>TN-2020200619104</i></p>
+      <p>
+        D.No. 1/426, Kallangadu 3rd street (Malligai Kadai Stop),<br />
+        Senthuran Garden, Tirupur-641605.
+      </p>
+      <p><b>Ph: 9788042981</b></p>
+    </div>
+    <hr />
+
+    <div class="top ">
+      <div class="lft ">
+        <p>Name</p>
+        <p>Age</p>
+        <p>Phone</p>
+        <p>Property</p>
+        <p>Date</p>
+      </div>
+      <div class="rit ">
+        <p>{{name}}</p>
+        <p>{{age}}</p>
+        <p>{{phone}}</p>
+        <p>{{property}}</p>
+        <p>{{date|date:'d/m/Y'}}</p>
+      </div>
+      <img src={{image.url}} alt="Customer Pic">
+    </div>
+    <div class="cont">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;
+          In the year {{date|date:'Y'}}, on the {{date|date:'dS'}} {{date|date:'F'}}, the esteemed property mentioned above was solemnly pledged to the reputable institution known as Venkateshwara Finance.
+
+        </p><br>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;
+          Mr/Mrs/Miss <b>Natesan K</b>, who resides at <b><i>{{addressline_1}}, {{addressline_2}}, {{city}}-{{postal_code}}</i></b>,
+        borrowed a sum of Rs.<b>{{loan_amount}}</b> on <b>{{date|date:'d/M/Y'}}</b>. The pledged collateral, a chain weighing <b>{{wig}}</b> grams and <b>{{wimg}}</b> milligrams,
+        with a net value of Rs.<b>{{pvalue}}</b>, was utilized to secure the loan.
+     </p>
+    </div>
+    <div class="base">
+      <div class="ls">
+        <p>Signature of the <br> Borrower or Left-hand thumb impression</p>
+      </div>
+      <div class="rt">
+        <p>Signature of the <br>money lender<br>R.Venkateshwara Finance</p>
+      </div>
+    </div>
+<hr>
+    <div class="foot">
+      <p>
+        The Receipt must need to updated once every six months <br>
+      the pledged property must be recovered by the pledger else the pledged property will be auctioned.
+      </p>
+    </div>
+
+  </body>
+</html>
