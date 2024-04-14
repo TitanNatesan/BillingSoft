@@ -1,103 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>User Details</title>
     <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 0;
-            padding:0;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+      }
+      .user-image {
+        width: 150px; /* Adjust size as needed */
+        height: 150px; /* Adjust size as needed */
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
 
-        h1 {
-            color: #009688;
-            margin-bottom: 20px;
-        }
+      h1 {
+        color: #009688;
+        margin-bottom: 20px;
+      }
 
-        .user-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 15px;
-            margin-bottom: 20px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+      .user-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 20px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
 
-        .user-card h2 {
-            margin-bottom: 10px;
-            color: #555;
-        }
+      .user-card h2 {
+        margin-bottom: 10px;
+        color: #555;
+      }
 
-        .user-card p {
-            margin-bottom: 5px;
-        }
+      h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        text-decoration: underline;
+      }
 
-        .receipt-card {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 15px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+      .user-card p {
+        margin-bottom: 5px;
+      }
 
-        .receipt-card p {
-            margin-bottom: 5px;
-        }
+      .receipt-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
 
-        nav {
-            margin-bottom: 20px;
-        }
+      .receipt-card p {
+        margin-bottom: 5px;
+      }
 
-        a {
-            color: #009688;
-            text-decoration: none;
-        }
+      nav {
+        margin-bottom: 20px;
+      }
 
-        a:hover {
-            text-decoration: underline;
-        }
-        nav {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            background-color: #009688;
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
+      a {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+      nav {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        background-color: #009688;
+        padding: 10px 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <nav>
-        <a href="/" id="home-button">Home</a>
-        <a onclick="window.history.back()">Back</a>
+      <a href="/" id="home-button">Home</a>
+      <a onclick="window.history.back()">Back</a>
     </nav>
 
     <h1>User Details</h1>
     <div class="user-card">
-        <h2>{{ user.name }}</h2>
-        <p><strong>Age:</strong> {{ user.age }}</p>
-        <p><strong>Property:</strong> {{ user.property.name }}</p>
-        <p><strong>Address:</strong> {{ user.address.address_line_1 }}, {{ user.address.city }}, {{ user.address.state }}</p>
-        <p><strong>Phone:</strong> {{ user.address.phone }}</p>
-        <h3>Receipts:</h3>
-        {% for receipt in user.reciept_set.all %}
-        <div class="receipt-card"  onclick="window.location.href='/loan-details/{{receipt.id}}'">
-            <p><strong>Receipt ID:</strong> {{ receipt.id }}</p>
-            <p><strong>Loan Amount:</strong> {{ receipt.loan_amount }}</p>
-            <p><strong>Date Issued:</strong> {{ receipt.when }}</p>
-        </div>
-        {% endfor %}
+        
+        <img src="{{ user.pic.url }}" alt="User Image" class="user-image" />
+
+      <h2>{{ user.name }}</h2>
+      <p><strong>Age:</strong> {{ user.age }}</p>
+        
+      <h3>Properties:</h3>
+      {% for property in user.properties.all %}
+      <div class="receipt-card" onclick="window.location.href='/property/{{property.id}}/details'">
+        <p><strong>ID:</strong> {{ property.id }}</p>
+        <p><strong>Name:</strong> {{ property.name }}</p>
+        <p><strong>Description:</strong> {{ property.description }}</p>
+        <p><strong>Value:</strong> {{ property.value }}</p>
+      </div>
+
+      {% endfor %}
+      <h3>Address:</h3>
+      <p><strong>Address Line 1:</strong> {{ user.address.address_line_1 }}</p>
+      <p><strong>Address Line 2:</strong> {{ user.address.address_line_2 }}</p>
+      <p><strong>City:</strong> {{ user.address.city }}</p>
+      <p><strong>State:</strong> {{ user.address.state }}</p>
+      <p><strong>Zip:</strong> {{ user.address.postal_code }}</p>
+      <h3>Contact:</h3>
+
+      <p>
+        <strong>Address:</strong> {{ user.address.address_line_1 }}, {{ user.address.city }}, {{ user.address.state }}
+      </p>
+      <p><strong>Phone:</strong> {{ user.phone }}</p>
+      <h3>Loans:</h3>
+      {% for loan in user.loan_set.all %}
+      <div class="receipt-card" onclick="window.location.href='/loan/{{loan.id}}/details'">
+        <p><strong>Loan ID:</strong> {{ loan.id }}</p>
+        <p><strong>Loan Amount:</strong> {{ loan.loan_amount }}</p>
+        <p><strong>Date Issued:</strong> {{ loan.when }}</p>
+      </div>
+      {% endfor %}
     </div>
     {% include "footer.html" %}
-
-</body>
+  </body>
 </html>

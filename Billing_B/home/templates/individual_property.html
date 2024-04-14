@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #009688;
+            margin-bottom: 20px;
+        }
+
+        .property-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-card h2 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .property-card p {
+            margin-bottom: 5px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background-color: #009688;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+        .imagee{
+            width: 100%;
+            margin: auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            margin-top: 10px;
+            
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" id="home-button">Home</a>
+        <a onclick="window.history.back()">Back</a>
+    </nav>
+
+    <h1>Property Details</h1>
+    <div class="property-card">
+        <h2>{{ property.name }}</h2>
+        <p><strong>ID:</strong> {{ property.id }}</p>
+        <p><strong>Description:</strong> {{ property.description }}</p>
+        <p><strong>Value:</strong> {{ property.value }}</p>
+        <p><strong>Weight (grams):</strong> {{ property.weight_grams }}</p>
+        <p><strong>Weight (milligrams):</strong> {{ property.weight_milligrams }}</p>
+        <img src="{{ property.pic.url }}" alt="{{ property.name }}" class="imagee">
+        <!-- You can add more details here as needed -->
+    </div>
+
+    {% include "footer.html" %}
+</body>
+</html>

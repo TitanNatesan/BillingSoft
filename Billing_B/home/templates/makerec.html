@@ -34,6 +34,7 @@
         margin-bottom: 8px;
         color: #555;
       }
+      
       #formm {
         display: none;
       }
@@ -130,6 +131,7 @@
         text-align: center;
         width: 20%;
         margin: auto 40%;
+        margin-bottom: 50px;
       }
 
       @keyframes fadeIn {
@@ -253,7 +255,7 @@
           <option value="">--SELECT--</option>
           {% for user in users %}
           <option value="{{user.id}}">
-            {{user.name}} | {{user.address.phone}}
+            {{user.name}} | {{user.phone}}
           </option>
           {% endfor %}
         </select>

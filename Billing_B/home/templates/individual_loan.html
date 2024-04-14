@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loan Details</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+        min-height: 100vh; /* Ensure full viewport height */
+        flex-wrap: wrap;
+      }
+
+      .content {
+        max-width: 96%; /* Adjust max-width for larger screens */
+        width: 100%;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #009688;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .loan-card {
+        margin-bottom: 20px;
+      }
+
+      .due-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      .due-table th,
+      .due-table td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+
+      .due-table tr:hover {
+        background-color: #00ff7731;
+        transition: background-color 0.8s ease;
+      }
+
+      nav {
+        display: block;
+        width: 100%;
+        background-color: #009688;
+        padding: 14px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      .due-table th {
+        background-color: #009688;
+        color: #fff;
+      }
+
+      a {
+        box-shadow: inset 0 0 0 0 #fff;
+        color: #fff;
+        margin: 0 -0.25rem;
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        font-size: 1.2rem;
+        text-decoration: none;
+        float: right;
+        margin-right: 20px;
+        transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+      a:hover {
+        box-shadow: inset 100px 0 0 0 #fff;
+        color: #009688;
+        transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+      }
+
+      #popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+      }
+
+      .closeButton {
+        position: absolute;
+        top: 30px;
+        right: 20px;
+        background-color: transparent;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-size: 2.5rem;
+        font-weight: ligther;
+        cursor: pointer;
+        transition: transform 0.1s ease-in-out;
+      }
+
+      .closeButton:hover {
+        transform: translateY(-5px);
+        transition: transform 0.1s ease-in-out;
+      }
+
+      #home-button {
+        float: right;
+        margin-right: 20px;
+      }
+
+      #home-button:hover {
+        background-color: #fff;
+        color: #009688;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      label {
+        margin-top: 10px;
+      }
+
+      input {
+        margin-top: 5px;
+        padding: 10px;
+        border: 2px solid #3498db;
+        border-radius: 6px;
+        width: 250px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: #2980b9;
+      }
+
+      select {
+        margin-top: 5px;
+        padding: 10px;
+        border: 2px solid #3498db;
+        border-radius: 6px;
+        width: 250px;
+        font-size: 14px;
+        outline: none;
+      }
+
+      select:focus {
+        border-color: #2980b9;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px;
+        border: 2px solid #3498db;
+        border-radius: 6px;
+        width: 250px;
+        font-size: 14px;
+        outline: none;
+        background-color: #3498db;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      #successPopup {
+        display: none;
+        background-color: rgba(0, 128, 0, 0.8);
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        border-radius: 5px;
+      }
+    </style>
+    <script>
+        function closeSuccessPopup() {
+          document.getElementById("successPopup").style.display = "none";
+          // Reload the page after 2 seconds
+          setTimeout(function () {
+            window.location.reload();
+          }, 2000);
+        }
+      
+        function showPopup(dueID) {
+          document.getElementById("popup").style.display = "block";
+          document.getElementById("due_id").value = dueID;
+          console.log(dueID);
+        }
+      
+        function submitForm() {
+          var form = document.getElementById("updateForm");
+          var formData = new FormData(form);
+      
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "/update", true);
+          xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+      
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = JSON.parse(xhr.responseText);
+              if (response.success) {
+                // Show success popup in green color
+                document.getElementById("successPopup").style.backgroundColor = "#00FF00";
+                document.getElementById("successTitle").innerText = "Success!";
+                document.getElementById("successMessage").innerText = response.message;
+              } else {
+                // Show success popup in red color with error message
+                document.getElementById("successPopup").style.backgroundColor = "#FF0000";
+                document.getElementById("successTitle").innerText = "Error!";
+                document.getElementById("successMessage").innerText = response.message;
+              }
+              document.getElementById("successPopup").style.display = "block";
+              document.getElementById("popup").style.display = "none";
+              // Reload the page after 2 seconds
+              setTimeout(function () {
+                window.location.reload();
+              }, 2000);
+            } else if (xhr.readyState === 4 && xhr.status === 400) {
+              // Handle errors or display error messages
+              console.log("Error:", xhr.responseText);
+            }
+          };
+      
+          xhr.send(formData);
+        }
+      </script>
+  
+  </head>
+  <body>
+    <nav>
+      <a onclick="window.history.back()">Back</a>
+      <a href="/" id="home-button">Home</a>
+    </nav>
+
+    <div id="popup">
+      <div
+        style="
+          background-color: #fff;
+          width: 50%;
+          margin: 10% auto;
+          padding: 20px;
+          border-radius: 5px;
+        "
+      >
+        <button
+          onclick="document.getElementById('popup').style.display = 'none';"
+          class="closeButton"
+        >
+          X
+        </button>
+        <form id="updateForm" onsubmit="event.preventDefault(); submitForm();">
+          {% csrf_token %}
+          <input type="hidden" name="due_id" id="due_id" />
+          <label for="paid_amount">Paid Amount:</label>
+          <input type="text" name="paid_amount" id="paid_amount" required />
+          <label for="payment_mode">Payment Mode:</label>
+          <select name="payment_mode" id="payment_mode" required>
+            <option value="Cash">Cash</option>
+            <option value="Cheque">Cheque</option>
+            <option value="NEFT">NEFT</option>
+            <option value="UPI">UPI</option>
+          </select>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" style="display: none;">
+        <button onclick="closeSuccessPopup()" class="closeButton">X</button>
+        <h2 id="successTitle" style="color: #fff">Updated!</h2>
+        <p id="successMessage" style="color: #fff">The update was successful.</p>
+      </div>
+
+    <div class="content">
+      <h1>Loan Details</h1>
+      <div class="loan-card">
+        <h2>Loan ID: {{ loan.id }}</h2>
+        <p><strong>Customer Name:</strong> {{ loan.user.name }}</p>
+        <p><strong>Loan Amount:</strong> {{ loan.loan_amount }}</p>
+        <p><strong>Loan Repaid:</strong> {{ loan.loan_repaid }}</p>
+        <p><strong>Interest Rate:</strong> {{ loan.intrest_rate }}%</p>
+        <p><strong>Number of Dues:</strong> {{ loan.no_of_dues }}</p>
+        <p><strong>Date Issued:</strong> {{ loan.when }}</p>
+        <!-- Add more loan details here as needed -->
+
+        <!-- Due details in table format -->
+        <h3>Due Details:</h3>
+        <table class="due-table">
+          <thead>
+            <tr>
+              <th>Due ID</th>
+              <th>Nth Due</th>
+              <th>Due Status</th>
+              <th>Paid Amount</th>
+              <th>Due Date</th>
+              <th>Paid Date</th>
+              <th>Payment Mode</th>
+              <th>Interest in Due</th>
+              <th>Principal in due</th>
+              <th>Due Amount</th>
+              <!-- Add more table headers if needed -->
+            </tr>
+          </thead>
+          <tbody>
+            {% for due in loan.dues.all %}
+            <tr onclick="showPopup({{due.id}})">
+              <td>{{ due.id }}</td>
+              <td>{{ due.nth_due }}</td>
+              <td>{{ due.due_status }}</td>
+              <td>{{ due.paid_amount }}</td>
+              <td>{{ due.due_date }}</td>
+              <td>{{ due.paid_date }}</td>
+              <td>{{ due.payment_mode }}</td>
+              <td>{{ due.int_due }}</td>
+              <td>{{ due.pri_due }}</td>
+              <td>{{ due.due_amount }}</td>
+              <!-- Add more table cells if needed -->
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <p><strong>Total Due Amount:</strong> {{ loan.total_payable }}</p>
+      </div>
+    </div>
+
+    {% include "footer.html" %}
+  </body>
+</html>

@@ -1,0 +1,47 @@
+==================================================================================================================================================
+| Installment Number | EMI Due Date | Outstanding Principal (in Rupees) | Principal (in Rupees) | Interest (in Rupees) | Installment (in Rupees) |
+|====================|==============|===================================|=======================|======================|=========================|
+| 1                  | 05/04/2024   | 19999                             | 1721.34               | 146.66               | 1868                    |
+| 2                  | 05/05/2024   | 18277.66                          | 1502.44               | 365.56               | 1868                    |
+| 3                  | 05/06/2024   | 16775.22                          | 1532.49               | 335.51               | 1868                    |
+| 4                  | 05/07/2024   | 15242.73                          | 1563.14               | 304.86               | 1868                    |
+| 5                  | 05/08/2024   | 13679.59                          | 1594.4                | 273.6                | 1868                    |
+| 6                  | 05/09/2024   | 12085.19                          | 1626.29               | 241.71               | 1868                    |
+| 7                  | 05/10/2024   | 10458.9                           | 1658.82               | 209.18               | 1868                    |
+| 8                  | 05/11/2024   | 8800.08                           | 1691.99               | 176.01               | 1868                    |
+| 9                  | 05/12/2024   | 7108.09                           | 1725.83               | 42.17                | 1868                    |
+| 10                 | 05/01/2025   | 5382.26                           | 1760.35               | 107.65               | 1868                    |
+| 11                 | 05/02/2025   | 3621.91                           | 1795.56               | 72.44                | 1868                    |
+| 12                 | 05/03/2025   | 1826.35                           | 1826.35               | 36.65                | 1863                    |
+==================================================================================================================================================
+
+
+def calculate_emi_components(principal, monthly_interest_rate, tenure_months):
+    # Convert monthly interest rate to decimal
+    monthly_interest_rate_decimal = monthly_interest_rate / 100.0
+
+    # Calculate EMI using the formula
+    emi = (principal * monthly_interest_rate_decimal * (1 + monthly_interest_rate_decimal) ** tenure_months) / \
+          ((1 + monthly_interest_rate_decimal) ** tenure_months - 1)
+
+    emi_components = []
+    remaining_principal = principal
+
+    for month in range(1, tenure_months + 1):
+        interest = remaining_principal * monthly_interest_rate_decimal
+        principal_payment = emi - interest
+        remaining_principal -= principal_payment
+        emi_components.append((month, emi, principal_payment, interest, remaining_principal))
+
+    return emi_components
+
+# Example usage
+principal = 8300  # Rupees
+monthly_interest_rate = 2  # 2%
+tenure_months = 10
+
+emi_components = calculate_emi_components(principal, monthly_interest_rate, tenure_months)
+
+print("Month\t\tEMI\t\tPrincipal Payment\t\tInterest\t\tRemaining Principal")
+for month, emi, principal_payment, interest, remaining_principal in emi_components:
+    print(f"{month}\t\t\t{emi:.2f}\t\t{principal_payment:.2f}\t\t\t\t{interest:.2f}\t\t\t\t{remaining_principal:.2f}")
